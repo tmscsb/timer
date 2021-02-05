@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
     export let value: number;
+    export let id: string;
     const dispatch = createEventDispatcher();
 
     onMount(() => {
@@ -8,18 +9,21 @@
     });
 
     function onkeyup(e: KeyboardEvent) {
-        console.log(e.key);
-        if (e.key == "Backspace") {
+        if (e.key == "ArrowLeft") {
             dispatch("prev", e.target);
         } else {
-            dispatch("next", e.target);
+            if (e.key != "Backspace") {
+                dispatch("next", e.target);
+            }
         }
     }
 </script>
 
 <input
+    {id}
     bind:value
     on:keyup={(e) => onkeyup(e)}
+    on:click={(event) => event.currentTarget.select()}
     class="small-input"
     type="text"
     maxlength="1"
