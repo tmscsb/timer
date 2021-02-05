@@ -22,6 +22,9 @@
             next.select();
             punchInTime = calculateTime();
             localStorage.setItem("punchIn", punchInTime.toString());
+        } else {
+            punchInTime = calculateTime();
+            localStorage.setItem("punchIn", punchInTime.toString());
         }
     }
 
@@ -30,6 +33,9 @@
         if (prev != null && "0123".includes(prev.id) && prev.id != "") {
             prev.focus();
             prev.select();
+            punchInTime = calculateTime();
+            localStorage.setItem("punchIn", punchInTime.toString());
+        } else {
             punchInTime = calculateTime();
             localStorage.setItem("punchIn", punchInTime.toString());
         }
