@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
     export let value: number;
     export let id: string;
+    export let min: number;
+    export let max: number;
     const dispatch = createEventDispatcher();
-
-    onMount(() => {
-        // console.log("itt", input);
-    });
 
     function onkeyup(e: KeyboardEvent) {
         if (e.key == "ArrowLeft") {
@@ -16,6 +14,14 @@
                 dispatch("next", e.target);
             }
         }
+        onchangeV();
+    }
+
+    function onchangeV() {
+        if (value == null) {
+            value = 0;
+        }
+        dispatch("change", value);
     }
 </script>
 
@@ -24,14 +30,22 @@
     bind:value
     on:keyup={(e) => onkeyup(e)}
     on:click={(event) => event.currentTarget.select()}
-    class="small-input"
-    type="text"
-    maxlength="1"
+    type="number"
+    {min}
+    {max}
 />
 
 <style scoped>
-    .small-input {
-        width: 30px !important;
-        font-size: 1em;
+    input {
+        text-align: center;
+        width: 50px !important;
+        font-size: 30px;
+        border-radius: 10px;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 </style>

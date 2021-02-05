@@ -18,22 +18,20 @@
     }
 </script>
 
-<main>
-    <PunchIn bind:punchInTime />
-    <Timer bind:from={punchInTime} {duration} />
-    {new Date(punchInTime).toLocaleTimeString()}
-</main>
+<div style="height:100%" class="d-flex justify-content-center align-items-center">
+    <div class="d-flex flex-column">
+        <div class="d-flex justify-content-center p-2">
+            <PunchIn bind:punchInTime />
+        </div>
+        <div class="d-flex justify-content-center p-2">
+            <Timer bind:from={punchInTime} {duration} />
+        </div>
+        <div class="d-flex justify-content-center p-2">
+            {new Date(punchInTime).toLocaleTimeString()}
+        </div>
+    </div>
+</div>
 
 <style>
     @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
-    main {
-        text-align: center;
-    }
-
-    /* h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	} */
 </style>
