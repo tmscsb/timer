@@ -1,10 +1,14 @@
 <script lang="ts">
     import Timer from "./components/Timer.svelte";
-    import PunchIn from "./components/PunchIn.svelte";
+    import Punch from "./components/Punch.svelte";
+
+    import Content from "./components/Content.svelte";
+    import Modal from "svelte-simple-modal";
+
     import { onMount } from "svelte";
 
     let punchInTime: number = getPunchInTime();
-    let duration: number = (8 * 60 + 30) * 60 * 1000;
+    let duration: number = getDurationTime();
 
     onMount(() => {});
 
@@ -16,18 +20,35 @@
             return Date.now();
         }
     }
+
+    function getDurationTime(): number {
+        const duration = localStorage.getItem("duration");
+        if (duration) {
+            return parseInt(duration);
+        } else {
+            return Date.now();
+        }
+    }
 </script>
 
 <div style="height:100%" class="d-flex justify-content-center align-items-center">
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-center p-2">
-            <PunchIn bind:punchInTime />
+            <Modal>
+                <Content />
+            </Modal>
+        </div>
+        <div class="d-flex justify-content-center p-2">
+            <Punch bind:punchTime={punchInTime} type="punchIn" />
         </div>
         <div class="d-flex justify-content-center p-2">
             <Timer bind:from={punchInTime} {duration} />
         </div>
         <div class="d-flex justify-content-center p-2">
-            {new Date(punchInTime).toLocaleTimeString()}
+            Punch In Time: {new Date(punchInTime).toLocaleTimeString()}
+        </div>
+        <div class="d-flex justify-content-center">
+            Punch Out TIme: {new Date(punchInTime + +duration).toLocaleTimeString()}
         </div>
     </div>
 </div>
