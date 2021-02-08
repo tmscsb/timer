@@ -54,6 +54,7 @@
         clockIsWorking = true;
         clock = timeinterval;
     }
+    
     function stopClock() {
         clearInterval(clock);
         clockIsWorking = false;
