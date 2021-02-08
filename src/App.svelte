@@ -30,6 +30,13 @@
             return (8 * 60 + 30) * 60 * 1000;
         }
     }
+
+    function getDurationString() {
+        const y = 60 * 60 * 1000;
+        const h = Math.floor(duration / y);
+        const m = Math.floor((duration - h * y) / (y / 60));
+        return `${h}:${m}`;
+    }
 </script>
 
 <div style="height:100%" class="d-flex justify-content-center align-items-center">
@@ -49,7 +56,10 @@
             Punch In Time: {new Date(punchInTime).toLocaleTimeString()}
         </div>
         <div class="d-flex justify-content-center">
-            Punch Out TIme: {new Date(punchInTime + +duration).toLocaleTimeString()}
+            Punch Out Time: {new Date(punchInTime + +duration).toLocaleTimeString()}
+        </div>
+        <div class="d-flex justify-content-center">
+            Work time: {getDurationString()}
         </div>
     </div>
 </div>
