@@ -26,7 +26,8 @@
         if (duration) {
             return parseInt(duration);
         } else {
-            return Date.now();
+            localStorage.setItem("duration", ((8 * 60 + 30) * 60 * 1000).toString());
+            return (8 * 60 + 30) * 60 * 1000;
         }
     }
 </script>

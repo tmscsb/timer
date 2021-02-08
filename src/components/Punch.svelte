@@ -48,7 +48,6 @@
         let d: Date = new Date();
         d.setHours(+h1 * 10 + +h2, +m1 * 10 + +m2, 0);
         if (type == "duration") {
-            console.log("itt");
             punchTime = ((+h1 * 10 + +h2) * 60 + m1 * 10 + +m2) * 60 * 1000;
             localStorage.setItem(type, (((+h1 * 10 + +h2) * 60 + m1 * 10 + +m2) * 60 * 1000).toString());
         } else {

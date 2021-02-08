@@ -8,7 +8,7 @@
         if (duration) {
             return parseInt(duration);
         } else {
-            return (8 * 60 + 30) * 60 * 1000;
+            return 0;
         }
     }
 </script>
