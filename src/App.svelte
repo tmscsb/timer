@@ -6,24 +6,22 @@
     import Modal from "svelte-simple-modal";
 
     import { punchInTime, workDuration } from "./store/store";
-    import {
-        dateFormatter,
-        numberToHour,
-        dateFromTimeMilis,
-        dateMiliSecondsFromTimeMilis,
-    } from "./helper/dateHelper";
+    import { dateFormatter, numberToHour, dateFromTimeMilis, dateMiliSecondsFromTimeMilis } from "./helper/dateHelper";
 
     let punchInDateTime: number = dateMiliSecondsFromTimeMilis($punchInTime);
+    let remainingTime: number;
+
+    $: document.title =
+        remainingTime == undefined
+            ? "Timer Svelte app"
+            : `Timer Svelte app (${dateFormatter.format(dateMiliSecondsFromTimeMilis(remainingTime))})`;
 
     punchInTime.subscribe((value) => {
         punchInDateTime = dateMiliSecondsFromTimeMilis(value);
     });
 </script>
 
-<div
-    style="height:100%"
-    class="d-flex justify-content-center align-items-center"
->
+<div style="height:100%" class="d-flex justify-content-center align-items-center">
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-center p-2">
             <Modal>
@@ -34,17 +32,13 @@
             <TimeInput id="punchInTime" bind:value={$punchInTime} />
         </div>
         <div class="d-flex justify-content-center p-2">
-            <Timer bind:from={punchInDateTime} bind:duration={$workDuration} />
+            <Timer bind:from={punchInDateTime} bind:duration={$workDuration} bind:remainingTime />
         </div>
         <div class="d-flex justify-content-center p-2">
-            Punch In Time: {dateFormatter.format(
-                dateFromTimeMilis($punchInTime)
-            )}
+            Punch In Time: {dateFormatter.format(dateFromTimeMilis($punchInTime))}
         </div>
         <div class="d-flex justify-content-center">
-            Punch Out Time: {dateFormatter.format(
-                dateFromTimeMilis($punchInTime + +$workDuration)
-            )}
+            Punch Out Time: {dateFormatter.format(dateFromTimeMilis($punchInTime + +$workDuration))}
         </div>
         <div class="d-flex justify-content-center">
             Work time: {numberToHour($workDuration)}

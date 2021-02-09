@@ -4,10 +4,10 @@
 
     export let from: number;
     export let duration: number;
+    export let remainingTime: number;
     let timer: Time;
     let clock: number;
     let clockIsWorking: boolean = false;
-    let remainingTime: number;
 
     onMount(() => {
         startClock();
