@@ -7,6 +7,7 @@
     let timer: Time;
     let clock: number;
     let clockIsWorking: boolean = false;
+    let remainingTime: number;
 
     onMount(() => {
         startClock();
@@ -17,8 +18,8 @@
     }
 
     function getTimeRemaining(): Time {
-        let total = +from + +duration - Date.now();
-        total = checkIfInPlus() ? -total : total;
+        remainingTime = +from + +duration - Date.now();
+        let total = checkIfInPlus() ? -remainingTime : remainingTime;
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
@@ -35,12 +36,9 @@
 
     function fillWithLeadingZero(time: Time): Time {
         let t: Time = time;
-        t.hoursWithL0 =
-            t.hours < 10 ? "0" + t.hours.toString() : t.hours.toString();
-        t.minutesWithL0 =
-            t.minutes < 10 ? "0" + t.minutes.toString() : t.minutes.toString();
-        t.secondsWithL0 =
-            t.seconds < 10 ? "0" + t.seconds.toString() : t.seconds.toString();
+        t.hoursWithL0 = t.hours < 10 ? "0" + t.hours.toString() : t.hours.toString();
+        t.minutesWithL0 = t.minutes < 10 ? "0" + t.minutes.toString() : t.minutes.toString();
+        t.secondsWithL0 = t.seconds < 10 ? "0" + t.seconds.toString() : t.seconds.toString();
         return t;
     }
 
@@ -54,6 +52,7 @@
         clockIsWorking = true;
         clock = timeinterval;
     }
+
     function stopClock() {
         clearInterval(clock);
         clockIsWorking = false;
@@ -62,29 +61,16 @@
 
 <div>
     <div class="d-flex justify-content-center pt-2">
-        <button
-            class="btn btn-secondary ml-2 mr-2"
-            on:click={() => startClock()}
-            disabled={clockIsWorking}
-        >
-            START</button
-        >
-        <button
-            class="btn btn-secondary ml-2 mr-2"
-            on:click={() => stopClock()}
-            disabled={!clockIsWorking}
-        >
-            STOP</button
-        >
+        <button class="btn btn-secondary ml-2 mr-2" on:click={() => startClock()} disabled={clockIsWorking}> START</button>
+        <button class="btn btn-secondary ml-2 mr-2" on:click={() => stopClock()} disabled={!clockIsWorking}> STOP</button>
     </div>
     <div>
         {#if timer && clockIsWorking}
             <h1>
-                {#if checkIfInPlus()}+{:else}-{/if}
-                {timer.hoursWithL0} : {timer.minutesWithL0} : {timer.secondsWithL0}
+                {#if remainingTime < 0}+{:else}-{/if}{timer.hoursWithL0}:{timer.minutesWithL0}:{timer.secondsWithL0}&nbsp;
             </h1>
         {:else}
-            <h1>-- : -- : --</h1>
+            <h1>--:--:--</h1>
         {/if}
     </div>
 </div>

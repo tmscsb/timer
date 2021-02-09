@@ -1,18 +1,20 @@
 <script lang="ts">
-    import Punch from "../components/Punch.svelte";
-
-    let durationTime: number = getDuration();
-
-    function getDuration(): number {
-        const duration = localStorage.getItem("duration");
-        if (duration) {
-            return parseInt(duration);
-        } else {
-            return 0;
-        }
+    import TimeInput from "./TimeInput.svelte";
+    import { workDuration } from "../store/store";
+    let duration: number = $workDuration;
+    let message: string = "";
+    function setNewWordDuration() {
+        workDuration.set(duration);
+        message = "New vaue has been set!";
     }
 </script>
 
-<div class="d-flex justify-content-center p-2">
-    <Punch bind:punchTime={durationTime} type="duration" />
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-center p-2">
+        <TimeInput id="workduration" bind:value={duration} />
+    </div>
+    <div class="d-flex justify-content-center p-2">
+        <button class="btn btn-secondary ml-2 mr-2" on:click={() => setNewWordDuration()}> SAVE</button>
+    </div>
+    {message}
 </div>

@@ -4,25 +4,24 @@
     export let id: string;
     export let min: number;
     export let max: number;
-    export let input: HTMLInputElement;
+    export let input: HTMLInputElement = undefined;
     const dispatch = createEventDispatcher();
 
     function onkeyup(e: KeyboardEvent) {
-        console.log(e);
-        if (e.key == "ArrowLeft") {
-            dispatch("prev", e.target);
-        } else {
-            if (e.key != "Backspace") {
+        switch (e.key) {
+            case "ArrowLeft":
+                dispatch("prev", e.target);
+                break;
+            case "Backspace":
                 dispatch("next", e.target);
-            }
+                break;
+            default:
+                dispatch("next", e.target);
         }
-        onchangeV();
     }
 
-    function onchangeV() {
-        if (value == null) {
-            value = 0;
-        }
+    function onValueChange() {
+        value = Math.min(max, Math.max(min, value));
         dispatch("change", value);
     }
 </script>
@@ -33,6 +32,7 @@
     bind:value
     on:keyup={(e) => onkeyup(e)}
     on:click={(event) => event.currentTarget.select()}
+    on:change={() => onValueChange()}
     type="number"
     {min}
     {max}

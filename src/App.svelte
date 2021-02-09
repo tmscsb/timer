@@ -1,45 +1,29 @@
 <script lang="ts">
     import Timer from "./components/Timer.svelte";
-    import Punch from "./components/Punch.svelte";
+    import TimeInput from "./components/TimeInput.svelte";
 
     import Content from "./components/Content.svelte";
     import Modal from "svelte-simple-modal";
 
-    import { onMount } from "svelte";
+    import { punchInTime, workDuration } from "./store/store";
+    import {
+        dateFormatter,
+        numberToHour,
+        dateFromTimeMilis,
+        dateMiliSecondsFromTimeMilis,
+    } from "./helper/dateHelper";
 
-    let punchInTime: number = getPunchInTime();
-    let duration: number = getDurationTime();
+    let punchInDateTime: number = dateMiliSecondsFromTimeMilis($punchInTime);
 
-    onMount(() => {});
-
-    function getPunchInTime(): number {
-        const punchIn = localStorage.getItem("punchIn");
-        if (punchIn) {
-            return parseInt(punchIn);
-        } else {
-            return Date.now();
-        }
-    }
-
-    function getDurationTime(): number {
-        const duration = localStorage.getItem("duration");
-        if (duration) {
-            return parseInt(duration);
-        } else {
-            localStorage.setItem("duration", ((8 * 60 + 30) * 60 * 1000).toString());
-            return (8 * 60 + 30) * 60 * 1000;
-        }
-    }
-
-    function getDurationString() {
-        const y = 60 * 60 * 1000;
-        const h = Math.floor(duration / y);
-        const m = Math.floor((duration - h * y) / (y / 60));
-        return `${h}:${m}`;
-    }
+    punchInTime.subscribe((value) => {
+        punchInDateTime = dateMiliSecondsFromTimeMilis(value);
+    });
 </script>
 
-<div style="height:100%" class="d-flex justify-content-center align-items-center">
+<div
+    style="height:100%"
+    class="d-flex justify-content-center align-items-center"
+>
     <div class="d-flex flex-column">
         <div class="d-flex justify-content-center p-2">
             <Modal>
@@ -47,19 +31,23 @@
             </Modal>
         </div>
         <div class="d-flex justify-content-center p-2">
-            <Punch bind:punchTime={punchInTime} type="punchIn" />
+            <TimeInput id="punchInTime" bind:value={$punchInTime} />
         </div>
         <div class="d-flex justify-content-center p-2">
-            <Timer bind:from={punchInTime} {duration} />
+            <Timer bind:from={punchInDateTime} bind:duration={$workDuration} />
         </div>
         <div class="d-flex justify-content-center p-2">
-            Punch In Time: {new Date(punchInTime).toLocaleTimeString()}
+            Punch In Time: {dateFormatter.format(
+                dateFromTimeMilis($punchInTime)
+            )}
         </div>
         <div class="d-flex justify-content-center">
-            Punch Out Time: {new Date(punchInTime + +duration).toLocaleTimeString()}
+            Punch Out Time: {dateFormatter.format(
+                dateFromTimeMilis($punchInTime + +$workDuration)
+            )}
         </div>
         <div class="d-flex justify-content-center">
-            Work time: {getDurationString()}
+            Work time: {numberToHour($workDuration)}
         </div>
     </div>
 </div>
