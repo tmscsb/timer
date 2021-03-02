@@ -6,6 +6,7 @@ import { terser } from "rollup-plugin-terser";
 import autoProcess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
+import json from '@rollup/plugin-json';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -39,6 +40,7 @@ export default {
         file: "public/build/bundle.js",
     },
     plugins: [
+        json(),
         svelte({
             preprocess: autoProcess({ sourceMap: !production }),
             compilerOptions: {
@@ -80,4 +82,13 @@ export default {
     watch: {
         clearScreen: false,
     },
+    onwarn: function (warning) {
+        // Skip certain warnings
+
+        // should intercept ... but doesn't in some rollup versions
+        if (warning.code === 'THIS_IS_UNDEFINED') { return; }
+
+        // console.warn everything else
+        console.warn(warning.message);
+    }
 };
